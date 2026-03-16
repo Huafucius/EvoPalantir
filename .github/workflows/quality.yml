@@ -33,6 +33,9 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Build web app
+        run: pnpm --filter web build
+
   python-quality:
     runs-on: ubuntu-latest
     steps:

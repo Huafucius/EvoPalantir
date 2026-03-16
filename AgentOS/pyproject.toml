@@ -1,5 +1,5 @@
 [project]
-authors = [{name = "Huafucius", email = "huafucius@bupt.edu.cn"}]
+authors = [{name = "Huafucius"}]
 dependencies = []
 name = "AgentOS"
 requires-python = ">= 3.11"

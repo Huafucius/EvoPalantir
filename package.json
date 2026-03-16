@@ -9,7 +9,7 @@
     "format": "prettier . --write",
     "format:check": "prettier --check .",
     "typecheck": "pnpm -r --if-present typecheck",
-    "quality": "pnpm lint && pnpm format:check && pnpm typecheck && pixi run --manifest-path AgentOS/pyproject.toml quality"
+    "quality": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm --filter web build && pixi run --manifest-path AgentOS/pyproject.toml quality"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
