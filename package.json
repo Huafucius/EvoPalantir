@@ -1,0 +1,25 @@
+{
+  "name": "evopalantir",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.29.2",
+  "scripts": {
+    "lint": "eslint . --ext .js,.cjs,.mjs,.ts,.tsx --max-warnings=0",
+    "lint:fix": "eslint . --ext .js,.cjs,.mjs,.ts,.tsx --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier --check .",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "quality": "pnpm lint && pnpm format:check && pnpm typecheck && pixi run --manifest-path AgentOS/pyproject.toml quality"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^15.15.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.29.1"
+  }
+}

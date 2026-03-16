@@ -1,0 +1,50 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# Editors and local tooling
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Node.js / pnpm
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+
+# Next.js / TypeScript generated files
+.next/
+out/
+*.tsbuildinfo
+
+# Generic build outputs
+dist/
+build/
+coverage/
+
+# Python / notebooks
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+*.egg-info/
+.eggs/
+
+# Logs
+*.log

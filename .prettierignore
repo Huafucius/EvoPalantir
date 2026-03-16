@@ -1,0 +1,24 @@
+.git
+
+# Node.js / frontend generated files
+**/node_modules
+**/.next
+**/out
+**/dist
+**/build
+**/coverage
+**/.vercel
+**/next-env.d.ts
+**/*.tsbuildinfo
+
+# Python / Pixi generated files
+**/.pixi
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/.ipynb_checkpoints
+**/.venv
+**/venv
+
+# Generated lockfiles not meant for formatting
+AgentOS/pixi.lock
