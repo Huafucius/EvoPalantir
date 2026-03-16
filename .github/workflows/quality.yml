@@ -76,6 +76,8 @@ jobs:
 
       - name: Setup Pixi
         uses: prefix-dev/setup-pixi@v0.8.8
+        with:
+          manifest-path: AgentOS/pyproject.toml
 
       - name: Run AgentOS quality checks
         run: pixi run --manifest-path AgentOS/pyproject.toml quality
