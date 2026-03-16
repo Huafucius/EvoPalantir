@@ -31,10 +31,10 @@ At this stage, the repository contains project structure, workspace configuratio
 - TypeScript workspace: `pnpm` workspaces
 - Future frontend baseline: `Next.js 16 App Router`
 - TypeScript quality: `eslint`, `typescript-eslint`, `eslint-plugin-simple-import-sort`, `prettier`, `prettier-plugin-tailwindcss`
-- Git hooks for JS/TS: tracked `husky` hook scaffold, intentionally not auto-enabled
+- Repository hooks: root-level `husky` hooks shared by the whole monorepo
 - Python environment: `pixi`
 - Python quality: `ruff`, `pyright`, `pytest`
-- Python hooks: `pre-commit`
+- Commit messages: `commitlint` with Conventional Commits
 
 ## AgentOS Notes
 
@@ -47,8 +47,10 @@ At this stage, the repository contains project structure, workspace configuratio
 
 - Root JS/TS config is ready through `eslint.config.mjs`, `.prettierrc.json`, `pnpm-workspace.yaml`, and `package.json`.
 - Python quality is configured in `AgentOS/pyproject.toml` via Pixi tasks.
-- CI skeleton lives in `.github/workflows/quality.yml`.
-- Local hook scaffolds live in `.husky/pre-commit` and `.pre-commit-config.yaml`; they stay opt-in so the repo does not mutate local git config during initialization.
+- CI quality checks live in `.github/workflows/quality.yml`.
+- Local git hooks are managed only through `.husky/pre-commit` and `.husky/commit-msg`.
+- `pre-commit` runs the full monorepo quality gate before each commit.
+- `commit-msg` enforces Conventional Commits before git writes the commit.
 
 ## Roadmap Context
 
@@ -67,4 +69,4 @@ pnpm install
 pixi run --manifest-path AgentOS/pyproject.toml quality
 ```
 
-If you want local hooks later, enable them explicitly in your own environment.
+`pnpm install` also installs the shared husky hooks for this repository.

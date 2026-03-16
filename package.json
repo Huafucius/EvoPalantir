@@ -9,9 +9,12 @@
     "format": "prettier . --write",
     "format:check": "prettier --check .",
     "typecheck": "pnpm -r --if-present typecheck",
+    "prepare": "husky",
     "quality": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm --filter web build && pixi run --manifest-path AgentOS/pyproject.toml quality"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@eslint/js": "^9.22.0",
     "eslint": "^9.22.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
