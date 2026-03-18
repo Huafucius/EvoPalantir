@@ -64,19 +64,26 @@ AOS 的世界由五类本体对象构成。
 
 ### 2.2 对象关系
 
-```
-AOS
- ├── 治理 → Agent
- │          └── 拥有 → Session
- │                      └── 驱动 → CU
- │
- ├── 治理 → Skill
- │          ├── load → Session（上下文面进入 SessionContext）
- │          └── start → pluginInstance（插件面形成运行实体）
- │                       └── 通过 hook + 控制面介入 AOS
- │
- └── 拥有 → RuntimeLog、AOSCP、Hook 插槽、RuntimeEventBus
-             Scheduler、ManagedResource 注册表
+```mermaid
+flowchart TD
+    AOS["AOS"]
+    Agent["Agent"]
+    Session["Session"]
+    CU["Compute Unit"]
+    Skill["Skill"]
+    PI["pluginInstance"]
+    Infra["RuntimeLog · AOSCP · Hook 插槽\nRuntimeEventBus · Scheduler\nManagedResource 注册表"]
+
+    AOS -->|治理| Agent
+    AOS -->|治理| Skill
+    AOS -.->|拥有| Infra
+
+    Agent -->|拥有| Session
+    Session -->|驱动| CU
+
+    Skill -->|"load — skillText 进入 SessionContext"| Session
+    Skill -->|start| PI
+    PI -.->|"hook + AosSDK 介入控制面"| AOS
 ```
 
 更精确地说：

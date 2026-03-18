@@ -581,8 +581,12 @@ kind 取值：`user-input`、`assistant-output`、`tool-bash-call`、`tool-bash-
 
 默认顺序固定为：
 
-```
-前置 hook / transform hook → 实际动作 → SessionHistory 写入 → 后置 hook / 生命周期 hook → RuntimeEvent 发布
+```mermaid
+flowchart LR
+    A["前置 hook\n/ transform hook"] --> B["实际动作"]
+    B --> C["SessionHistory\n写入"]
+    C --> D["后置 hook\n/ 生命周期 hook"]
+    D --> E["RuntimeEvent\n发布"]
 ```
 
 hook 名与 RuntimeEvent.type 可以共享同名标签（如 `session.started`），但二者是不同机制：hook 是控制流插槽，RuntimeEvent 是运行时事实。
@@ -951,36 +955,46 @@ session.context.compact:
 
 ### 9.4 Session Loop 主形态
 
-```
-phase = idle
-  ↓
-取 SessionContext.messages
-  ↓
-触发 transform hooks（system.transform → messages.transform → compute.params.transform）
-  ↓
-进入 execution queue → phase = queued
-  ↓
-调度器授予执行 → phase = computing
-  ↓
-调用 CU
-  ↓
-产生 bash 调用?
-  ├── 是 → phase = tooling
-  │         触发 tool.env、tool.before
-  │         执行 bash，产生 raw result
-  │         触发 tool.after（可生成 visible result）
-  │         写 SessionHistory（tool-bash part，含 visibleResult）
-  │         raw result 写 RuntimeLog
-  │         增量更新 SessionContext
-  │         继续 CU
-  └── 否 → 写 SessionHistory（assistant message）
-            增量更新 SessionContext
-            触发 compute.after
-            检查终止条件
-              ├── 继续 → phase = idle，下一轮
-              ├── interrupt → 进入 Interrupt 流程
-              ├── compaction → 进入 Compaction 流程
-              └── archive → 进入归档流程
+```mermaid
+flowchart TD
+    IDLE["phase = idle"]
+    GET["取 SessionContext.messages"]
+    TRANSFORM["触发 transform hooks\nsystem.transform → messages.transform\n→ compute.params.transform"]
+    QUEUE["进入 execution queue\nphase = queued"]
+    SCHED["调度器授予执行\nphase = computing"]
+    CU["调用 CU"]
+    BASH{产生 bash 调用?}
+
+    TOOLING["phase = tooling\n触发 tool.env、tool.before"]
+    EXEC["执行 bash → raw result"]
+    AFTER["触发 tool.after → visible result\n写 SessionHistory / raw result 写 RuntimeLog\n增量更新 SessionContext"]
+
+    WRITE_MSG["写 SessionHistory\n增量更新 SessionContext\n触发 compute.after"]
+    CHECK{检查终止条件}
+
+    INTERRUPT(["进入 Interrupt 流程"])
+    COMPACT(["进入 Compaction 流程"])
+    ARCHIVE(["进入归档流程"])
+
+    IDLE --> GET
+    GET --> TRANSFORM
+    TRANSFORM --> QUEUE
+    QUEUE --> SCHED
+    SCHED --> CU
+    CU --> BASH
+
+    BASH -->|是| TOOLING
+    TOOLING --> EXEC
+    EXEC --> AFTER
+    AFTER --> CU
+
+    BASH -->|否| WRITE_MSG
+    WRITE_MSG --> CHECK
+
+    CHECK -->|继续| IDLE
+    CHECK -->|interrupt| INTERRUPT
+    CHECK -->|compaction| COMPACT
+    CHECK -->|archive| ARCHIVE
 ```
 
 每轮推进前的三个 transform hook（system.transform、messages.transform、compute.params.transform）的结果只影响本次调用，不写入 SessionHistory，不修改 SessionContext 持久状态。
