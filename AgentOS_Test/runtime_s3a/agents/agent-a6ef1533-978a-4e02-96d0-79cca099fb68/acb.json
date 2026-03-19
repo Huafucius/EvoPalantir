@@ -1,0 +1,12 @@
+{
+  "agentId": "agent-a6ef1533-978a-4e02-96d0-79cca099fb68",
+  "status": "active",
+  "displayName": "agent-s3",
+  "revision": 1,
+  "createdBy": "human",
+  "createdAt": "2026-03-19T07:10:42Z",
+  "updatedAt": "2026-03-19T07:10:42Z",
+  "archivedAt": null,
+  "defaultSkills": [],
+  "permissions": {}
+}

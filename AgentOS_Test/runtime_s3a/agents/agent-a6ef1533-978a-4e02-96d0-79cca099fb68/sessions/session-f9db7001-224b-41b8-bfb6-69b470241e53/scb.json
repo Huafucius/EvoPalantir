@@ -1,0 +1,13 @@
+{
+  "sessionId": "session-f9db7001-224b-41b8-bfb6-69b470241e53",
+  "agentId": "agent-a6ef1533-978a-4e02-96d0-79cca099fb68",
+  "status": "ready",
+  "title": "s3",
+  "revision": 5,
+  "createdBy": "human",
+  "createdAt": "2026-03-19T07:10:48Z",
+  "updatedAt": "2026-03-19T07:11:09Z",
+  "archivedAt": null,
+  "defaultSkills": [],
+  "permissions": {}
+}

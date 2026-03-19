@@ -1,0 +1,3 @@
+{"id": "msg-12fee73c-ea56-41a0-b2e3-bbc5f7515248", "role": "user", "parts": [{"id": "part-66bd2bb3-809d-4629-9a42-8bf7c0a5f502", "type": "text", "text": "[[AOS-BOOTSTRAP begin]]"}], "metadata": {"createdAt": "2026-03-19T03:58:05Z", "origin": "aos"}}
+{"id": "msg-43569c60-a9dd-4978-957f-6dfd36242189", "role": "user", "parts": [{"id": "part-32a64cea-abc3-4328-ba22-4a142ca9321b", "type": "text", "text": "[[AOS-BOOTSTRAP done]]"}], "metadata": {"createdAt": "2026-03-19T03:58:05Z", "origin": "aos"}}
+{"id": "msg-d486c506-5bcf-4c4e-862e-99ab269b737b", "role": "user", "parts": [{"id": "part-7da012a6-1603-45f0-b194-a04fd913d895", "type": "text", "text": "hello"}], "metadata": {"createdAt": "2026-03-19T03:58:13Z", "origin": "human"}}

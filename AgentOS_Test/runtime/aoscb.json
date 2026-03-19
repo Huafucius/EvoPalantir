@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "aos/v0.81",
+  "name": "EvoPalantir-AOS",
+  "skillRoot": "skills",
+  "revision": 1,
+  "createdAt": "2026-03-19T03:57:59Z",
+  "updatedAt": "2026-03-19T03:57:59Z",
+  "defaultSkills": [
+    {
+      "name": "aos",
+      "load": "enable",
+      "start": "disable"
+    },
+    {
+      "name": "docs-rag",
+      "load": "enable",
+      "start": "disable"
+    },
+    {
+      "name": "bash-safe",
+      "load": "enable",
+      "start": "enable"
+    }
+  ],
+  "permissions": {}
+}

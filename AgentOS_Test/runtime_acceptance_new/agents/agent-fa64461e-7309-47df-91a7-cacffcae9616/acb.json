@@ -1,0 +1,12 @@
+{
+  "agentId": "agent-fa64461e-7309-47df-91a7-cacffcae9616",
+  "status": "active",
+  "displayName": "acceptance-agent",
+  "revision": 1,
+  "createdBy": "human",
+  "createdAt": "2026-03-19T11:39:16Z",
+  "updatedAt": "2026-03-19T11:39:16Z",
+  "archivedAt": null,
+  "defaultSkills": [],
+  "permissions": {}
+}

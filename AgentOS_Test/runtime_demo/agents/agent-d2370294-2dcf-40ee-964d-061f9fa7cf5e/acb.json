@@ -1,0 +1,12 @@
+{
+  "agentId": "agent-d2370294-2dcf-40ee-964d-061f9fa7cf5e",
+  "status": "active",
+  "displayName": "agent-demo",
+  "revision": 1,
+  "createdBy": "human",
+  "createdAt": "2026-03-19T07:04:51Z",
+  "updatedAt": "2026-03-19T07:04:51Z",
+  "archivedAt": null,
+  "defaultSkills": [],
+  "permissions": {}
+}

@@ -1,0 +1,13 @@
+{
+  "sessionId": "session-1c7d3104-b297-483d-b6a1-2269cf78c24c",
+  "agentId": "agent-0fe7a03a-a652-4afb-9791-c9018f34948a",
+  "status": "ready",
+  "title": "poc",
+  "revision": 2,
+  "createdBy": "human",
+  "createdAt": "2026-03-19T03:58:05Z",
+  "updatedAt": "2026-03-19T03:58:13Z",
+  "archivedAt": null,
+  "defaultSkills": [],
+  "permissions": {}
+}

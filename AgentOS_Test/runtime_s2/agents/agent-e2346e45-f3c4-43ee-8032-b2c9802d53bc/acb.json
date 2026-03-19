@@ -1,0 +1,12 @@
+{
+  "agentId": "agent-e2346e45-f3c4-43ee-8032-b2c9802d53bc",
+  "status": "active",
+  "displayName": "agent-s2",
+  "revision": 1,
+  "createdBy": "human",
+  "createdAt": "2026-03-19T07:01:09Z",
+  "updatedAt": "2026-03-19T07:01:09Z",
+  "archivedAt": null,
+  "defaultSkills": [],
+  "permissions": {}
+}

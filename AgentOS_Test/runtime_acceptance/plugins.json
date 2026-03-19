@@ -1,0 +1,17 @@
+{
+  "items": [
+    {
+      "instanceId": "session-session-6b7a3308-9ab6-462f-963e-413073ae5dcb-bash-safe",
+      "skillName": "bash-safe",
+      "ownerType": "session",
+      "ownerId": "session-6b7a3308-9ab6-462f-963e-413073ae5dcb",
+      "state": "running",
+      "startedAt": "2026-03-19T07:54:03Z",
+      "hooks": [
+        "tool.before",
+        "tool.env",
+        "tool.after"
+      ]
+    }
+  ]
+}
