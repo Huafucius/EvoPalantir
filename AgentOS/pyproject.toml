@@ -1,13 +1,26 @@
 [project]
 authors = [{name = "Huafucius"}]
-dependencies = []
+dependencies = [
+    "aiosqlite>=0.21,<0.22",
+    "click>=8.2,<9",
+    "litellm>=1.80,<2",
+    "pydantic>=2.11,<3",
+    "PyYAML>=6,<7",
+    "watchdog>=6,<7",
+]
 name = "AgentOS"
 requires-python = ">= 3.11"
 version = "0.1.0"
 
+[project.scripts]
+aos = "aos.cli:main"
+
 [build-system]
 build-backend = "hatchling.build"
 requires = ["hatchling"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aos"]
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
@@ -26,6 +39,13 @@ python = "3.11.*"
 ruff = ">=0.15.5,<0.16"
 pyright = ">=1.1.408,<2"
 pytest = ">=9.0.2,<10"
+pytest-asyncio = ">=1.2.0,<2"
+click = ">=8.2.1,<9"
+pydantic = ">=2.11.9,<3"
+aiosqlite = ">=0.21.0,<0.22"
+litellm = ">=1.80.5,<2"
+pyyaml = ">=6.0.3,<7"
+watchdog = ">=6.0.0,<7"
 
 [tool.ruff]
 line-length = 100
@@ -36,8 +56,10 @@ select = ["E", "F", "I", "B", "UP"]
 
 [tool.pyright]
 exclude = [".pixi", ".pytest_cache", ".ruff_cache"]
+extraPaths = ["src"]
 pythonVersion = "3.11"
 typeCheckingMode = "basic"
 
 [tool.pytest.ini_options]
 addopts = "-q"
+asyncio_mode = "auto"
