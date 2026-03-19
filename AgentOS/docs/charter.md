@@ -88,7 +88,7 @@ flowchart TD
     RU["ReActUnit"]
     Skill["Skill"]
     PI["pluginInstance"]
-    Infra["RuntimeLog · AOSCP · Hook\nRuntimeEventBus · Scheduler\nManagedResource"]
+    Infra["RuntimeLog·AOSCP·Hook<br>RuntimeEventBus·Scheduler<br>ManagedResource"]
 
     AOS -->|治理| Agent
     AOS -->|治理| Skill
