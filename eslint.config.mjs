@@ -6,6 +6,7 @@ import tseslint from 'typescript-eslint';
 export default [
   {
     ignores: [
+      '.worktrees/**',
       'AgentOS/**',
       '.git/**',
       '**/.next/**',
