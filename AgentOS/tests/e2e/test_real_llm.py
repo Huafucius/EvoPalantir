@@ -16,7 +16,6 @@ pytestmark = pytest.mark.filterwarnings(
 
 def _load_openrouter_env() -> bool:
     env_candidates = [
-        Path("/Users/zhangtianhua/Desktop/EvoPalantir/AgentOS/.env"),
         Path(__file__).resolve().parents[2] / ".env",
     ]
     env_data: dict[str, str] = {}
