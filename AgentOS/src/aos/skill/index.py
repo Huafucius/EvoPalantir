@@ -19,7 +19,11 @@ def _parse_skill_file(skill_file: Path) -> SkillManifest:
 
     metadata = frontmatter.get("metadata") if isinstance(frontmatter.get("metadata"), dict) else {}
     plugin = metadata.get("aos-plugin") if isinstance(metadata, dict) else None
-    plugin_path = skill_file.parent / plugin if isinstance(plugin, str) else None
+    plugin_path: Path | None = None
+    if isinstance(plugin, str):
+        resolved = (skill_file.parent / plugin).resolve()
+        if resolved.is_relative_to(skill_file.parent.resolve()):
+            plugin_path = resolved
 
     return SkillManifest(
         name=str(frontmatter.get("name") or skill_file.parent.name),

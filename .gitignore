@@ -49,5 +49,9 @@ venv/
 # Logs
 *.log
 
+# Runtime database files
+.agentos.db
+*.sqlite
+
 # Local worktrees
 .worktrees/
