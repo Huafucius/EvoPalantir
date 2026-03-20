@@ -26,7 +26,11 @@ class ToolBashInput(AOSModel):
 
 
 class ToolBashOutput(AOSModel):
-    visible_result: str
+    visible_result: str | None = None
+    content_id: str | None = None
+    size_chars: int | None = None
+    line_count: int | None = None
+    preview: str | None = None
 
 
 class ToolBashPart(AOSModel):
@@ -136,10 +140,23 @@ class SessionHistoryMessage(AOSModel):
         command: str,
         cwd: str | None,
         timeout_ms: int | None,
-        visible_result: str,
+        visible_result: str | None,
         error_text: str | None = None,
+        content_id: str | None = None,
+        size_chars: int | None = None,
+        line_count: int | None = None,
+        preview: str | None = None,
     ) -> SessionHistoryMessage:
         state = "output-error" if error_text is not None else "output-available"
+        output = None
+        if error_text is None:
+            output = ToolBashOutput(
+                visible_result=visible_result,
+                content_id=content_id,
+                size_chars=size_chars,
+                line_count=line_count,
+                preview=preview,
+            )
         return cls(
             role="assistant",
             parts=[
@@ -147,9 +164,7 @@ class SessionHistoryMessage(AOSModel):
                     tool_call_id=tool_call_id,
                     state=state,
                     input=ToolBashInput(command=command, cwd=cwd, timeout_ms=timeout_ms),
-                    output=ToolBashOutput(visible_result=visible_result)
-                    if error_text is None
-                    else None,
+                    output=output,
                     error_text=error_text,
                 )
             ],

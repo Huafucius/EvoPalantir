@@ -13,6 +13,8 @@ class SkillManifest(AOSModel):
     name: str
     description: str
     plugin: str | None = None
+    capabilities: list[str] = Field(default_factory=list)
+    capabilities_declared: bool = False
     skill_path: Path
     plugin_path: Path | None = None
     skill_text: str
@@ -53,6 +55,10 @@ class PluginInstance(AOSModel):
     state: Literal["starting", "running", "stopping", "stopped", "error"] = "starting"
     started_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     hooks: list[str] = Field(default_factory=list)
+    admission_hooks: list[str] = Field(default_factory=list)
+    transform_hooks: list[str] = Field(default_factory=list)
+    event_subscriptions: list[str] = Field(default_factory=list)
+    capabilities: list[str] = Field(default_factory=list)
     last_error: str | None = None
 
 

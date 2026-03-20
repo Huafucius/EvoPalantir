@@ -2,13 +2,14 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
-SCHEMA_VERSION = "aos/v0.81"
+SCHEMA_VERSION = "aos/v0.9"
 
 AgentStatus = Literal["active", "archived"]
 CreatedBy = str
 DefaultSkillAction = Literal["enable", "disable"]
 OwnerType = Literal["system", "agent", "session"]
 SessionStatus = Literal["initializing", "ready", "archived"]
+SessionPhase = Literal["bootstrapping", "idle", "dispatched", "compacting", "interrupted"]
 
 
 def to_camel(value: str) -> str:
@@ -31,5 +32,6 @@ __all__ = [
     "DefaultSkillAction",
     "OwnerType",
     "SCHEMA_VERSION",
+    "SessionPhase",
     "SessionStatus",
 ]

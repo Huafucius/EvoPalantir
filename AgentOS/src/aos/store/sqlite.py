@@ -56,6 +56,15 @@ CREATE TABLE IF NOT EXISTS managed_resources (
     owner_id TEXT,
     payload TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS content_blobs (
+    blob_id TEXT PRIMARY KEY,
+    session_id TEXT NOT NULL,
+    content TEXT NOT NULL,
+    size_chars INTEGER NOT NULL,
+    line_count INTEGER NOT NULL,
+    created_at TEXT NOT NULL
+);
 """
 
 
@@ -273,6 +282,45 @@ class SQLiteStore:
                 (owner_type, owner_id),
             )
         return [ManagedResource.model_validate_json(row[0]) for row in rows]
+
+    async def put_content(self, *, session_id: str, content: str) -> str:
+        from datetime import UTC, datetime
+        from uuid import uuid4
+
+        content_id = f"blob-{uuid4().hex[:12]}"
+        await self._execute(
+            (
+                "INSERT INTO content_blobs("
+                "blob_id, session_id, content, size_chars, line_count, created_at"
+                ") VALUES (?, ?, ?, ?, ?, ?)"
+            ),
+            (
+                content_id,
+                session_id,
+                content,
+                len(content),
+                content.count("\n") + (0 if not content or content.endswith("\n") else 1),
+                datetime.now(UTC).isoformat(),
+            ),
+        )
+        return content_id
+
+    async def get_content(self, content_id: str) -> str | None:
+        row = await self._fetchone(
+            "SELECT content FROM content_blobs WHERE blob_id = ?",
+            (content_id,),
+        )
+        return None if row is None else str(row[0])
+
+    async def materialize_content(self, content_id: str, *, runtime_dir: Path) -> Path:
+        content = await self.get_content(content_id)
+        if content is None:
+            raise KeyError(f"unknown content id: {content_id}")
+        blob_dir = runtime_dir / "blobs"
+        blob_dir.mkdir(parents=True, exist_ok=True)
+        path = blob_dir / content_id
+        path.write_text(content)
+        return path
 
     async def _execute(self, sql: str, params: tuple[Any, ...] = ()) -> None:
         async with aiosqlite.connect(self._database_path) as connection:

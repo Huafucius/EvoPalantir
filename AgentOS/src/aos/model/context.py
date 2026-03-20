@@ -77,20 +77,103 @@ def materialize_session_context(
     *,
     folded_refs: set[str] | set[HistoryRef],
     context_revision: int = 1,
+    materialized_paths: dict[str, str] | None = None,
+    content_map: dict[str, str] | None = None,
 ) -> SessionContext:
     folded = _ref_keys(folded_refs)
     start_index = _find_materialization_start(history)
     messages: list[ContextMessage] = []
+    materialized_paths = materialized_paths or {}
+    content_map = content_map or {}
 
     for message in history[start_index:]:
         if message.id in folded:
+            messages.append(
+                ContextMessage(
+                    wire={
+                        "role": message.role,
+                        "content": (
+                            "[[AOS-FOLDED]]\n"
+                            "type: message\n"
+                            f"seq: {message.metadata.seq}\n"
+                            f"role: {message.role}\n"
+                            f"origin: {message.metadata.origin}\n"
+                            f"unfold: aos session context unfold --ref {message.id}\n"
+                            "[[/AOS-FOLDED]]"
+                        ),
+                    },
+                    aos=ContextProvenance(
+                        source_message_id=message.id,
+                        source_part_id=None,
+                        kind="message-folded",
+                    ),
+                )
+            )
             continue
         for part in message.parts:
             part_key = f"{message.id}:{part.id}"
-            if part_key in folded:
-                continue
 
             if isinstance(part, BootstrapPart):
+                continue
+            if part_key in folded and isinstance(part, ToolBashPart):
+                tool_call = {
+                    "id": part.tool_call_id,
+                    "type": "function",
+                    "function": {
+                        "name": "bash",
+                        "arguments": json.dumps(
+                            {
+                                "command": part.input.command,
+                                "cwd": part.input.cwd,
+                                "timeoutMs": part.input.timeout_ms,
+                            }
+                        ),
+                    },
+                }
+                messages.append(
+                    ContextMessage(
+                        wire={"role": "assistant", "tool_calls": [tool_call]},
+                        aos=ContextProvenance(
+                            source_message_id=message.id,
+                            source_part_id=part.id,
+                            kind="tool-bash-call",
+                        ),
+                    )
+                )
+                content_id = part.output.content_id if part.output else None
+                file_path = (
+                    materialized_paths.get(content_id, f"$AOS_RUNTIME_DIR/blobs/{content_id}")
+                    if content_id is not None
+                    else "<inline>"
+                )
+                size_chars = part.output.size_chars if part.output else 0
+                line_count = part.output.line_count if part.output else 0
+                preview = part.output.preview if part.output and part.output.preview else ""
+                messages.append(
+                    ContextMessage(
+                        wire={
+                            "role": "tool",
+                            "tool_call_id": part.tool_call_id,
+                            "content": (
+                                "[[AOS-FOLDED]]\n"
+                                f"type: tool-bash-result\n"
+                                f"tool_call_id: {part.tool_call_id}\n"
+                                f"size: {size_chars} chars, {line_count} lines\n"
+                                f"preview:\n{preview}\n"
+                                f"file: {file_path}\n"
+                                f"unfold: aos session context unfold --ref {message.id}:{part.id}\n"
+                                "[[/AOS-FOLDED]]"
+                            ),
+                        },
+                        aos=ContextProvenance(
+                            source_message_id=message.id,
+                            source_part_id=part.id,
+                            kind="tool-bash-folded",
+                        ),
+                    )
+                )
+                continue
+            if part_key in folded:
                 continue
             if isinstance(part, TextPart):
                 messages.append(
@@ -172,7 +255,12 @@ def materialize_session_context(
                         ),
                     )
                 )
-                result_text = part.error_text or (part.output.visible_result if part.output else "")
+                result_text = part.error_text or ""
+                if part.output is not None:
+                    if part.output.visible_result is not None:
+                        result_text = part.output.visible_result
+                    elif part.output.content_id is not None:
+                        result_text = content_map.get(part.output.content_id, "")
                 messages.append(
                     ContextMessage(
                         wire={

@@ -4,12 +4,18 @@ import asyncio
 import os
 from typing import Any
 
-from aos.hook.engine import HookEngine
+from aos.hook.admission import AdmissionHookEngine
+from aos.hook.transform import TransformHookEngine
 
 
 class BashToolExecutor:
-    def __init__(self, hooks: HookEngine) -> None:
-        self._hooks = hooks
+    def __init__(
+        self,
+        admission_hooks: AdmissionHookEngine,
+        transform_hooks: TransformHookEngine,
+    ) -> None:
+        self._admission_hooks = admission_hooks
+        self._transform_hooks = transform_hooks
 
     async def execute(
         self,
@@ -18,14 +24,14 @@ class BashToolExecutor:
         args: dict[str, Any],
         owner_ids: dict[str, str | None],
     ) -> dict[str, Any]:
-        env_output = await self._hooks.dispatch(
+        env_output = await self._transform_hooks.dispatch(
             "tool.env",
             {"toolCallId": tool_call_id, "args": dict(args)},
             {"env": {}},
             agent_id=owner_ids.get("agent_id"),
             session_id=owner_ids.get("session_id"),
         )
-        args_output = await self._hooks.dispatch(
+        args_output = await self._admission_hooks.dispatch(
             "tool.before",
             {"toolCallId": tool_call_id, "args": dict(args)},
             dict(args),
@@ -61,7 +67,7 @@ class BashToolExecutor:
             "stderr": stderr.decode(),
             "combined": stdout.decode() + stderr.decode(),
         }
-        after_output = await self._hooks.dispatch(
+        after_output = await self._transform_hooks.dispatch(
             "tool.after",
             {"toolCallId": tool_call_id, "rawResult": raw_result},
             {"result": raw_result["combined"]},

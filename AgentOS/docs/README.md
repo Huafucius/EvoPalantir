@@ -21,9 +21,17 @@
 
 ### 实现计划
 
-| 文档                                                                                         | 内容                         |
-| -------------------------------------------------------------------------------------------- | ---------------------------- |
-| [`plans/2026-03-19-v09-arch-redesign/plan.md`](./plans/2026-03-19-v09-arch-redesign/plan.md) | 本次文档重写的计划与验收标准 |
+| 文档                                                                                           | 内容                         |
+| ---------------------------------------------------------------------------------------------- | ---------------------------- |
+| [`plans/2026-03-19-v09-arch-redesign/plan.md`](./plans/2026-03-19-v09-arch-redesign/plan.md)   | 本次文档重写的计划与验收标准 |
+| [`plans/2026-03-20-v09-implementation/plan.md`](./plans/2026-03-20-v09-implementation/plan.md) | v0.9 代码实现计划与验收标准  |
+
+### 当前实现进度
+
+- 2026-03-20：v0.9 代码实现开始，优先落地 state layer —— schema 升级、SCB lease 字段、ContentStore 基础接口
+- 2026-03-20：extension layer 基础落地 —— AdmissionHookEngine、TransformHookEngine、event-type-aware RuntimeEventBus、Capability Manifest 解析与 SDK 约束
+- 2026-03-20：control/execution 主链初步落地 —— AOSCP command/query split、query 不写 RL、异步 `session.dispatch`、lease 获取/释放、dispatch 等待接口
+- 2026-03-20：v0.9 原型实现完成 —— 36 个 AOSCP 操作、13/6/22 扩展机制、ContentStore + fold/unfold + rebuild、archived 终止态守卫、全量 AgentOS 测试/质量门禁通过
 
 ### 参考资料
 

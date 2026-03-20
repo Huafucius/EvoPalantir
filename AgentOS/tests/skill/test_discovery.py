@@ -34,6 +34,8 @@ def test_build_skill_index_parses_frontmatter_and_plugin_path(tmp_path: Path) ->
     assert manifest.name == "memory"
     assert manifest.description == "Long-term memory"
     assert manifest.plugin == "plugin.py"
+    assert manifest.capabilities == []
+    assert manifest.capabilities_declared is False
     assert manifest.plugin_path == plugin_file
     assert "Remember useful facts." in manifest.skill_text
 
@@ -42,7 +44,7 @@ def test_default_skill_resolution_overrides_by_scope() -> None:
     timestamp = datetime.fromisoformat("2026-03-19T10:00:00+00:00")
 
     aos_cb = AOSControlBlock(
-        schema_version="aos/v0.81",
+        schema_version="aos/v0.9",
         name="local",
         skill_root="/tmp/skills",
         revision=1,
@@ -63,6 +65,7 @@ def test_default_skill_resolution_overrides_by_scope() -> None:
         session_id="session-1",
         agent_id="agent-1",
         status="ready",
+        phase="idle",
         revision=1,
         created_by="human",
         created_at=timestamp,

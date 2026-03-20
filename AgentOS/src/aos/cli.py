@@ -50,6 +50,7 @@ def call_command(op: str, payload: str, db_path: str, skill_root: str, model: st
         and op
         in {
             "session.get",
+            "session.dispatch",
             "session.append",
             "session.interrupt",
             "session.compact",
@@ -92,6 +93,8 @@ def call_command(op: str, payload: str, db_path: str, skill_root: str, model: st
             default_model=model,
         )
         try:
+            if op == "session.dispatch" and "stream" not in data:
+                data["stream"] = True
             result = await runtime.call(op, **data)
             envelope = {"ok": True, "op": op, "data": result}
         except Exception as error:  # noqa: BLE001

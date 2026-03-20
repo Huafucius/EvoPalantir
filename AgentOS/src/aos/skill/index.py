@@ -19,6 +19,11 @@ def _parse_skill_file(skill_file: Path) -> SkillManifest:
 
     metadata = frontmatter.get("metadata") if isinstance(frontmatter.get("metadata"), dict) else {}
     plugin = metadata.get("aos-plugin") if isinstance(metadata, dict) else None
+    raw_capabilities = metadata.get("aos-capabilities") if isinstance(metadata, dict) else None
+    capabilities_declared = raw_capabilities is not None
+    capabilities: list[str] = []
+    if isinstance(raw_capabilities, list):
+        capabilities = [item for item in raw_capabilities if isinstance(item, str)]
     plugin_path: Path | None = None
     if isinstance(plugin, str):
         resolved = (skill_file.parent / plugin).resolve()
@@ -29,6 +34,8 @@ def _parse_skill_file(skill_file: Path) -> SkillManifest:
         name=str(frontmatter.get("name") or skill_file.parent.name),
         description=str(frontmatter.get("description") or skill_file.parent.name),
         plugin=plugin if isinstance(plugin, str) else None,
+        capabilities=capabilities,
+        capabilities_declared=capabilities_declared,
         skill_path=skill_file,
         plugin_path=plugin_path,
         skill_text=body.strip(),
@@ -54,6 +61,8 @@ def ensure_builtin_aos_skill(
     manifests["aos"] = SkillManifest(
         name="aos",
         description="built-in control skill",
+        capabilities=[],
+        capabilities_declared=False,
         skill_path=synthetic_path,
         plugin=None,
         plugin_path=None,
