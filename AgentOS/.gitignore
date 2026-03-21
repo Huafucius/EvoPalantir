@@ -1,3 +1,0 @@
-# AgentOS-local Pixi environment state
-.pixi/*
-!.pixi/config.toml
